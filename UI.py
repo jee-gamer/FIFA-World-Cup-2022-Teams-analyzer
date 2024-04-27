@@ -280,7 +280,7 @@ class StoryPage(tk.Frame):
         self.label = tk.Label(self, text=self.name, **font1,
                               pady=10)
         self.label.pack(side=tk.TOP, anchor=tk.CENTER)
-        self.label1 = tk.Label(self, text="More shots lead to more goals",
+        self.label1 = tk.Label(self, text="France is the best attacking Team",
                                **font1)
         self.label1.pack(side=tk.TOP, anchor=tk.CENTER)
 
@@ -288,25 +288,79 @@ class StoryPage(tk.Frame):
         self.graph_frame.pack(side=tk.TOP, anchor=tk.CENTER)
         self.canvas = None
 
-        self.corr = tk.StringVar()
-        self.corr_label = tk.Label(self, textvariable=self.corr, **font2,
-                                   pady=10)
-        self.corr_label.pack(side=tk.TOP, anchor=tk.CENTER)
+        self.create_graph(self.graph_frame)
 
-        self.create_graph()
+    def create_graph(self, graph_frame):
+        this_frame = tk.Frame(graph_frame)
+        this_frame.pack(side=tk.LEFT, anchor=tk.CENTER)
 
-    def create_graph(self):
-        fig, ax = plt.subplots(figsize=(15, 7))
+        fig, ax = plt.subplots(1, 4, figsize=(20, 5))
+        grange, goals = self.data.get_goal_data()
+        criteria = ['0-4', '5-9', '>=10']
+
+        ax[0].pie(goals, labels=grange, autopct='%.0f%%')
+        ax[0].set_title('Goals scored')
+        ax[0].legend(criteria, loc='upper right')
+
+        stat = "shots"
+        fig.subplots_adjust(hspace=0.5)
+
+        new_df = self.data.sort_df(stat)
+        sns.barplot(new_df, x='team', y=stat, ax=ax[1])
+        ax[1].set_title("Team " + stat)
+        ax[1].set_xticklabels(ax[1].get_xticklabels(), rotation=20)
+        sns.histplot(new_df, x=stat, ax=ax[2])
+        ax[2].set_title(stat.capitalize() + " Histogram")
+
+        mean = ("Mean of shots attempted: " + str(f"{new_df[stat].mean():.2f}")
+                )
+        SD = ("SD of shots attempted: " + str(f"{new_df[stat].std():.2f}"))
+
+        stat1 = "shots"
+        stat2 = "goals"
+
         df = self.data.df.copy()
+        sns.scatterplot(df, x=stat1, y=stat2, ax=ax[3])
 
-        sns.scatterplot(df, x='shots', y='goals')
-
-        corr = f"{df['shots'].corr(df['goals']):.2f}"
-        self.corr.set("Correlation Coefficient: " + corr)
+        corr = f"Correlation Coefficient between Goals and Shots: " \
+               f" {df[stat1].corr(df[stat2]):.2f}"
 
         if self.canvas:
             plt.close()
             self.canvas.get_tk_widget().destroy()
-        self.canvas = FigureCanvasTkAgg(fig, master=self.graph_frame)
+        self.canvas = FigureCanvasTkAgg(fig, master=this_frame)
         self.canvas.draw()
         self.canvas.get_tk_widget().pack(side=tk.TOP, anchor=tk.CENTER)
+
+        # TEXT LABEL
+        text_frame = tk.Frame(this_frame)
+        text_frame.pack(side=tk.TOP, anchor=tk.W, expand=True, padx=20)
+        mean_label = tk.Label(text_frame, text=mean, **font1)
+        SD_label = tk.Label(text_frame, text=SD, **font1)
+        corr_label = tk.Label(text_frame, text=corr, **font1)
+        label = tk.Label(text_frame, text="France is in the high category "
+                                          "of goals scored",
+                         **font2)
+        label2 = tk.Label(text_frame,
+                          text="France has made the most attempts to shoot",
+                          **font2)
+        label3 = tk.Label(text_frame, text="France is among "
+                                       "the three team that shot the most",
+                          **font2)
+        label4 = tk.Label(text_frame, text="More shots lead to more goals",
+                          **font2)
+        text1 = "Being the team that has one of the most goals scored and " \
+                "has made the most attempt to shoot, considering that more " \
+                "shots have a strong correlation with more goals, " \
+                "France is the best attacking team"
+        label4 = tk.Label(text_frame, text=text1,
+                          **font2)
+
+        mean_label.pack(side=tk.TOP, anchor=tk.W, expand=True)
+        SD_label.pack(side=tk.TOP, anchor=tk.W, expand=True)
+        corr_label.pack(side=tk.TOP, anchor=tk.W, expand=True)
+        label.pack(side=tk.TOP, anchor=tk.W, expand=True)
+        label2.pack(side=tk.TOP, anchor=tk.W, expand=True)
+        label3.pack(side=tk.TOP, anchor=tk.W, expand=True)
+        label4.pack(side=tk.TOP, anchor=tk.W, expand=True)
+

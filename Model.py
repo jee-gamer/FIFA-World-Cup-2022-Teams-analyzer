@@ -44,9 +44,29 @@ class TeamData:
         :return: return the top 10, or you can change it.
         """
         new_df = cls.df.copy()
-        new_df = new_df[['team', stat]].sort_values(by=stat, ascending=False)  # sort from biggest
+        new_df = new_df[['team', stat]].sort_values(by=stat,
+                                                    ascending=False)  # sort from biggest
         return new_df.head(10)
 
+    @classmethod
+    def get_goal_data(cls):
+        new_df = cls.df.copy()
+        new_df['goals'] = new_df['goals'].astype(str)
+        grange = ['low', 'moderate', 'high']
+        goals = [0, 0, 0]
+        for index, goal in enumerate(new_df['goals']):
+            goal = int(goal)
+            if goal < 5:
+                goals[0] += 1
+            elif goal < 10:
+                goals[1] += 1
+            elif goal >= 10:
+                goals[2] += 1
 
-T1 = TeamData()
-T1.sort_df('possession')
+        return grange, goals
+
+
+if __name__ == "__main__":
+    T1 = TeamData()
+    T1.sort_df('possession')
+    T1.get_goal_pie_graph()
