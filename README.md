@@ -8,4 +8,4 @@ The data required is in the "Data" folder
 
 Homepage: https://github.com/jee-gamer/FIFA-World-Cup-2022-Teams-analyzer/wiki
 
-How to install: https://github.com/jee-gamer/FIFA-World-Cup-2022-Teams-analyzer/wiki/Installation-Instructions
+How to install: https://github.com/jee-gamer/FIFA-World-Cup-2022-Teams-analyzer/wiki/Installation
