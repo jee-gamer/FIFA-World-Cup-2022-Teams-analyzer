@@ -1,10 +1,4 @@
-import csv
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-import sys
-import os
 
 directory = "Data/team_data.csv"
 

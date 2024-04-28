@@ -4,7 +4,6 @@ from tkinter import ttk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import seaborn as sns
-import pandas as pd
 
 from Model import TeamData
 
@@ -334,7 +333,8 @@ class StoryPage(tk.Frame):
 
         # TEXT LABEL
         text_frame = tk.Frame(this_frame)
-        text_frame.pack(side=tk.TOP, anchor=tk.W, expand=True, padx=20)
+        text_frame.pack(side=tk.TOP, anchor=tk.W, expand=True, padx=20, pady=20
+                        )
         mean_label = tk.Label(text_frame, text=mean, **font1)
         SD_label = tk.Label(text_frame, text=SD, **font1)
         corr_label = tk.Label(text_frame, text=corr, **font1)
