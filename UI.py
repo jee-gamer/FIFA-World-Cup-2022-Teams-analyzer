@@ -29,7 +29,7 @@ class Home(tk.Tk):
     def init_components(self):
         menubar = tk.Menu(self)
         self.config(menu=menubar)
-        unit_menu = tk.Menu(menubar)
+        unit_menu = tk.Menu(menubar, **font2)
 
         unit_menu.add_separator()
 
@@ -45,9 +45,10 @@ class Home(tk.Tk):
         )
 
         menubar.add_cascade(
-            label="Units",
+            label="Pages",
             menu=unit_menu,
-            underline=0
+            underline=0,
+            font=("", 50)
         )
 
         self.display_page = self.current_page(self.data)
@@ -115,6 +116,15 @@ class StatisticPage(tk.Frame):
         ax[0].set_title("Team " + stat)
         sns.histplot(new_df, x=stat, ax=ax[1])
         ax[1].set_title(stat.capitalize() + " Histogram")
+
+        if stat == "possession":
+            new_stat = stat + " (minutes)"
+            ax[0].set_ylabel(new_stat)
+            ax[1].set_xlabel(new_stat)
+        elif stat == "gk_save_pct":
+            new_stat = stat + " (percentage)"
+            ax[0].set_ylabel(new_stat)
+            ax[1].set_xlabel(new_stat)
 
         self.mean.set("Mean: " + str(f"{new_df[stat].mean():.2f}"))
         self.SD.set("SD: " + str(f"{new_df[stat].std():.2f}"))
