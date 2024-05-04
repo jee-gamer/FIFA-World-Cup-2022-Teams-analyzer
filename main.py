@@ -1,5 +1,5 @@
 from UI import *
-from Model import TeamData
+from model import TeamData
 
 
 if __name__ == '__main__':

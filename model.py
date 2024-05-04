@@ -58,9 +58,3 @@ class TeamData:
                 goals[2] += 1
 
         return grange, goals
-
-
-if __name__ == "__main__":
-    T1 = TeamData()
-    T1.sort_df('possession')
-    T1.get_goal_pie_graph()
