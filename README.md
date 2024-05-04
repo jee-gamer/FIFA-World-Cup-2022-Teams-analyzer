@@ -3,6 +3,7 @@
 This project is for showing the statistics and relationships between the teams
 that participated in the FIFA World Cup 2022.
 
+Preview
 There are 4 pages total.
 
 **Statistic page** | ![page1.png](screenshots%2Fpage1.png)
