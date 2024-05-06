@@ -1,5 +1,7 @@
+import sys
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -24,6 +26,7 @@ class Home(tk.Tk):
                           StoryPage]
         self.all_pages_name = [x(data).name for x in self.all_pages]
         self.current_page = RelationshipPage
+        self.protocol("WM_DELETE_WINDOW", self.on_close)
         self.init_components()
 
     def init_components(self):
@@ -41,7 +44,7 @@ class Home(tk.Tk):
 
         unit_menu.add_command(
             label='Exit',
-            command=self.destroy,
+            command=self.quit,
         )
 
         menubar.add_cascade(
@@ -53,6 +56,15 @@ class Home(tk.Tk):
 
         self.display_page = self.current_page(self.data)
         self.display_page.pack(side=tk.TOP)
+
+    def on_close(self):
+        """Handle window close events."""
+        quit_ok = messagebox.askokcancel(
+                      title="Confirm Quit",
+                      message="Do you really want to quit?")
+        if quit_ok:
+            # exit the mainloop
+            self.quit()
 
     def change_page(self, page):
         self.current_page = page
@@ -317,7 +329,8 @@ class StoryPage(tk.Frame):
         new_df = self.data.sort_df(stat)
         sns.barplot(new_df, x='team', y=stat, ax=ax[1])
         ax[1].set_title("Team " + stat)
-        ax[1].set_xticklabels(ax[1].get_xticklabels(), rotation=20)
+        plt.sca(ax[1])
+        plt.xticks(rotation=25)
         sns.histplot(new_df, x=stat, ax=ax[2])
         ax[2].set_title(stat.capitalize() + " Histogram")
 
